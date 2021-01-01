@@ -1,0 +1,30 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Build version (major.minor.patch)'
+        required: true
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: vatisoft
+      
+      - name: Restore NuGet packages
+        run: nuget restore
+        
+      - name: Build project
+        run: msbuild Xamarin.Plugin.Geolocation/Xamarin.Plugin.Geolocation.csproj /p:Configuration=Release /p:Version=${{ github.event.inputs.version }}
+        
+      - name: Push to GitHub
+        run: |
+          ## Nuget push has issues, use curl as a workaround
+          # dotnet nuget add source https://nuget.pkg.github.com/vatisoft/index.json -n vatisoft -u vatisoft -p ${{ secrets.PACKAGE_TOKEN }} --store-password-in-clear-text
+          # dotnet nuget push Xamarin.Plugin.Geolocation/bin/Release/*.nupkg --source "vatisoft"
+          curl -vX PUT -u "vatisoft:${{ secrets.PACKAGE_TOKEN }}" -F package=@Xamarin.Plugin.Geolocation/bin/Release/Vatisoft.Xamarin.Plugin.Geolocation.${{ github.event.inputs.version }}.nupkg https://nuget.pkg.github.com/vatisoft/
