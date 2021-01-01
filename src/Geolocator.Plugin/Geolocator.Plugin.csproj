@@ -32,6 +32,7 @@
 		<DebugType>portable</DebugType>
 		<DefineConstants>$(DefineConstants);</DefineConstants>
 
+    	<UseFullSemVerForNuGet>false</UseFullSemVerForNuGet>
 		<DisableExtraReferences>true</DisableExtraReferences>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 
@@ -41,6 +42,7 @@
 		<GenerateDocumentationFile>false</GenerateDocumentationFile>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)'=='Release' ">
+    	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<!-- sourcelink: Declare that the Repository URL can be published to NuSpec -->
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
