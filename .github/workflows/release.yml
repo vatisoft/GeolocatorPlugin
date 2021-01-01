@@ -27,4 +27,4 @@ jobs:
           ## Nuget push has issues, use curl as a workaround
           # dotnet nuget add source https://nuget.pkg.github.com/vatisoft/index.json -n vatisoft -u vatisoft -p ${{ secrets.PACKAGE_TOKEN }} --store-password-in-clear-text
           # dotnet nuget push Xamarin.Plugin.Geolocation/bin/Release/*.nupkg --source "vatisoft"
-          curl -vX PUT -u "vatisoft:${{ secrets.PACKAGE_TOKEN }}" -F package=@Xamarin.Plugin.Geolocation/bin/Release/Vatisoft.Xamarin.Plugin.Geolocation.${{ github.event.inputs.version }}.nupkg https://nuget.pkg.github.com/vatisoft/
+          curl -vX PUT -u "vatisoft:${{ secrets.PACKAGE_TOKEN }}" -F package=@src/Geolocator.Plugin/bin/Release/Xam.Plugin.Geolocator.${{ github.event.inputs.version }}.nupkg https://nuget.pkg.github.com/vatisoft/
