@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Plugin.Geolocator.Abstractions.FusedLocation;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -86,7 +87,8 @@ namespace Plugin.Geolocator.Abstractions
 		/// <param name="minimumDistance">Distance distance in meters between updates</param>
 		/// <param name="includeHeading">Include heading or not</param>
 		/// <param name="listenerSettings">Optional settings (iOS only)</param>
-		Task<bool> StartListeningAsync(TimeSpan minimumTime, double minimumDistance, bool includeHeading = false, ListenerSettings listenerSettings = null);
+		/// <param name="locationRequest">Location request settings (Android only)</param>
+		Task<bool> StartListeningAsync(TimeSpan minimumTime, double minimumDistance, bool includeHeading = false, ListenerSettings listenerSettings = null, LocationRequest locationRequest = null);
 
 
 		/// <summary>

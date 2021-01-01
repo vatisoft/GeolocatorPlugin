@@ -11,6 +11,7 @@ using Android.Content;
 using Android.Content.PM;
 using Plugin.Permissions;
 using Android.Runtime;
+using Plugin.Geolocator.Abstractions.FusedLocation;
 using Address = Plugin.Geolocator.Abstractions.Address;
 
 namespace Plugin.Geolocator
@@ -307,7 +308,8 @@ namespace Plugin.Geolocator
 		/// <param name="minimumDistance">Distance</param>
 		/// <param name="includeHeading">Include heading or not</param>
 		/// <param name="listenerSettings">Optional settings (iOS only)</param>
-		public async Task<bool> StartListeningAsync(TimeSpan minimumTime, double minimumDistance, bool includeHeading = false, ListenerSettings listenerSettings = null)
+		/// <param name="locationRequest">Location request settings (Android only)</param>
+		public async Task<bool> StartListeningAsync(TimeSpan minimumTime, double minimumDistance, bool includeHeading = false, ListenerSettings listenerSettings = null, LocationRequest locationRequest = null)
 		{
 			var hasPermission = await CheckPermissions();
 			if (!hasPermission)

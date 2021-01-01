@@ -101,10 +101,6 @@
       <Project>{36b8dd43-b679-4d13-8ba9-ded633e7b25f}</Project>
       <Name>Geolocator.Plugin</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GeolocatorTests\GeolocatorTests.csproj">
-      <Project>{7D60E3CB-2799-4416-85BA-2374284EB3F1}</Project>
-      <Name>GeolocatorTests</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Plugin.Permissions">

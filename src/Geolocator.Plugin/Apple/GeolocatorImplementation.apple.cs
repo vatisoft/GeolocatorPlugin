@@ -6,6 +6,7 @@ using System.Threading;
 using CoreLocation;
 using Foundation;
 using Plugin.Geolocator.Abstractions;
+using Plugin.Geolocator.Abstractions.FusedLocation;
 #if __IOS__ || __TVOS__
 using UIKit;
 #elif __MACOS__
@@ -359,7 +360,8 @@ namespace Plugin.Geolocator
 		/// <param name="minimumDistance">Distance</param>
 		/// <param name="includeHeading">Include heading or not</param>
 		/// <param name="listenerSettings">Optional settings (iOS only)</param>
-		public async Task<bool> StartListeningAsync(TimeSpan minimumTime, double minimumDistance, bool includeHeading = false, ListenerSettings listenerSettings = null)
+		/// <param name="locationRequest">Location request settings (Android only)</param>
+		public async Task<bool> StartListeningAsync(TimeSpan minimumTime, double minimumDistance, bool includeHeading = false, ListenerSettings listenerSettings = null, LocationRequest locationRequest = null)
 		{
 
 

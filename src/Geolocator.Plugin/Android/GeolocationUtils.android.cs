@@ -3,6 +3,7 @@ using Plugin.Geolocator.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Plugin.Geolocator.Abstractions.FusedLocation;
 using Address = Plugin.Geolocator.Abstractions.Address;
 
 namespace Plugin.Geolocator
@@ -80,6 +81,30 @@ namespace Plugin.Geolocator
 				p.IsFromMockProvider = false;
 
 			return p;
+		}
+
+		internal static Android.Gms.Location.LocationRequest ToLocationRequest(this LocationRequest locationRequest)
+		{
+			var request = new global::Android.Gms.Location.LocationRequest();
+
+			if (locationRequest.Priority.HasValue)
+			{
+				request.SetPriority((int)locationRequest.Priority.Value);
+			}
+			if (locationRequest.Interval.HasValue)
+			{
+				request.SetInterval((long)locationRequest.Interval.Value.TotalMilliseconds);
+			}
+			if (locationRequest.FastestInterval.HasValue)
+			{
+				request.SetFastestInterval((long)locationRequest.FastestInterval.Value.TotalMilliseconds);
+			}
+			if (locationRequest.SmallestDisplacement.HasValue)
+			{
+				request.SetSmallestDisplacement(locationRequest.SmallestDisplacement.Value);
+			}
+
+			return request;
 		}
 
 		internal static IEnumerable<Address> ToAddresses(this IEnumerable<Android.Locations.Address> addresses)
