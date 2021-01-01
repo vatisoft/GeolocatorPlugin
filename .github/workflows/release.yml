@@ -17,10 +17,10 @@ jobs:
           ref: vatisoft
       
       - name: Restore NuGet packages
-        run: nuget restore
+        run: cd src && nuget restore && cd ..
         
       - name: Build project
-        run: msbuild Xamarin.Plugin.Geolocation/Xamarin.Plugin.Geolocation.csproj /p:Configuration=Release /p:Version=${{ github.event.inputs.version }}
+        run: msbuild src/Geolocator.Plugin/Geolocator.Plugin.csproj /p:Configuration=Release /p:Version=${{ github.event.inputs.version }}
         
       - name: Push to GitHub
         run: |
