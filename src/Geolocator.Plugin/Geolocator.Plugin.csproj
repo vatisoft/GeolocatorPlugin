@@ -11,7 +11,7 @@
 		<PackageVersion>$(Version).0</PackageVersion>
 		<Authors>James Montemagno</Authors>
 		<PackageId>Xam.Plugin.Geolocator</PackageId>
-		<PackOnBuild>true</PackOnBuild>
+		<PackOnBuild>false</PackOnBuild>
 		<PackageIconUrl>https://raw.githubusercontent.com/jamesmontemagno/GeolocatorPlugin/master/art/icon.png</PackageIconUrl>
 		<PackageLicenseUrl>https://github.com/jamesmontemagno/GeolocatorPlugin/blob/master/LICENSE</PackageLicenseUrl>
 		<Owners>JamesMontemagno</Owners>
@@ -31,6 +31,9 @@
 		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 		<DebugType>portable</DebugType>
 		<DefineConstants>$(DefineConstants);</DefineConstants>
+
+		<DisableExtraReferences>true</DisableExtraReferences>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
