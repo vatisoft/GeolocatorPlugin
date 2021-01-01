@@ -12,10 +12,10 @@
 		<Authors>James Montemagno</Authors>
 		<PackageId>Xam.Plugin.Geolocator</PackageId>
 		<PackOnBuild>false</PackOnBuild>
-		<PackageIconUrl>https://raw.githubusercontent.com/jamesmontemagno/GeolocatorPlugin/master/art/icon.png</PackageIconUrl>
-		<PackageLicenseUrl>https://github.com/jamesmontemagno/GeolocatorPlugin/blob/master/LICENSE</PackageLicenseUrl>
+		<PackageIconUrl>https://raw.githubusercontent.com/vatisoft/GeolocatorPlugin/vatisoft/art/icon.png</PackageIconUrl>
+		<PackageLicenseUrl>https://github.com/vatisoft/GeolocatorPlugin/blob/vatisoft/LICENSE</PackageLicenseUrl>
 		<Owners>JamesMontemagno</Owners>
-		<PackageProjectUrl>https://github.com/jamesmontemagno/GeolocatorPlugin</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/vatisoft/GeolocatorPlugin</PackageProjectUrl>
 		<Summary>Easly access geolocation across Xamarin.iOS, Xamarin.Android, and Windows.</Summary>
 		<PackageTags>xamarin, xamarin.forms, plugin, plugin for xamarin, geolocation, geocoding, ios, android, uwp</PackageTags>
 		<Title>Geolocator Plugin for Xamarin and Windows</Title>
@@ -23,8 +23,8 @@
 			Easly access geolocation across Xamarin.iOS, Xamarin.Android, and Windows.
 		</Description>
 		<Copyright>Copyright 2019</Copyright>
-		<RepositoryUrl>https://github.com/jamesmontemagno/GeolocatorPlugin</RepositoryUrl>
-		<PackageReleaseNotes>See: https://github.com/jamesmontemagno/GeolocatorPlugin </PackageReleaseNotes>
+		<RepositoryUrl>https://github.com/vatisoft/GeolocatorPlugin</RepositoryUrl>
+		<PackageReleaseNotes>See: https://github.com/vatisoft/GeolocatorPlugin </PackageReleaseNotes>
 
 		<NeutralLanguage>en</NeutralLanguage>
 		<LangVersion>default</LangVersion>
