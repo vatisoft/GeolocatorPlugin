@@ -61,15 +61,24 @@ namespace Plugin.Geolocator
 		internal static Position ToPosition(this Location location)
 		{
 			var p = new Position();
+
+			p.HasAccuracy = location.HasAccuracy;
 			if (location.HasAccuracy)
 				p.Accuracy = location.Accuracy;
+
+			p.HasAltitude = location.HasAltitude;
 			if (location.HasAltitude)
 				p.Altitude = location.Altitude;
+
+			p.HasHeading = location.HasBearing;
 			if (location.HasBearing)
 				p.Heading = location.Bearing;
+
+			p.HasSpeed = location.HasSpeed;
 			if (location.HasSpeed)
 				p.Speed = location.Speed;
 
+			p.HasLatitudeLongitude = true;
 			p.Longitude = location.Longitude;
 			p.Latitude = location.Latitude;
 			p.Timestamp = location.GetTimestamp();

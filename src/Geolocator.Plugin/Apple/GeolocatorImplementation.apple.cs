@@ -13,7 +13,7 @@ using AppKit;
 #endif
 
 #if __IOS__
-using Plugin.Permissions.Abstractions;
+using Xamarin.Essentials;
 #endif
 
 namespace Plugin.Geolocator
@@ -43,10 +43,10 @@ namespace Plugin.Geolocator
 
 
 #if __IOS__
-            if (UIDevice.CurrentDevice.CheckSystemVersion(6, 0))
-                manager.LocationsUpdated += OnLocationsUpdated;
-            else
-                manager.UpdatedLocation += OnUpdatedLocation;
+			if (UIDevice.CurrentDevice.CheckSystemVersion(6, 0))
+				manager.LocationsUpdated += OnLocationsUpdated;
+			else
+				manager.UpdatedLocation += OnUpdatedLocation;
 #elif __MACOS__ || __TVOS__
 			manager.LocationsUpdated += OnLocationsUpdated;
 #endif
@@ -75,12 +75,12 @@ namespace Plugin.Geolocator
 
 		async Task<bool> CheckWhenInUsePermission()
 		{
-			var status = await Permissions.CrossPermissions.Current.CheckPermissionStatusAsync<Permissions.LocationWhenInUsePermission>();
+			var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
 			if (status != PermissionStatus.Granted)
 			{
 				Console.WriteLine("Currently does not have Location permissions, requesting permissions");
 
-				status = await Permissions.CrossPermissions.Current.RequestPermissionAsync<Permissions.LocationWhenInUsePermission>();
+				status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
 
 				if (status != PermissionStatus.Granted)
 				{
@@ -94,12 +94,12 @@ namespace Plugin.Geolocator
 		}
 		async Task<bool> CheckAlwaysPermissions()
 		{
-			var status = await Permissions.CrossPermissions.Current.CheckPermissionStatusAsync<Permissions.LocationAlwaysPermission>();
+			var status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
 			if (status != PermissionStatus.Granted)
 			{
 				Console.WriteLine("Currently does not have Location permissions, requesting permissions");
 
-				status = await Permissions.CrossPermissions.Current.RequestPermissionAsync<Permissions.LocationAlwaysPermission>();
+				status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
 
 				if (status != PermissionStatus.Granted)
 				{
@@ -214,13 +214,17 @@ namespace Plugin.Geolocator
 				return null;
 
 			var position = new Position();
+			position.HasAccuracy = true;
 			position.Accuracy = newLocation.HorizontalAccuracy;
+			position.HasAltitude = newLocation.Altitude > -1;
 			position.Altitude = newLocation.Altitude;
 			position.AltitudeAccuracy = newLocation.VerticalAccuracy;
+			position.HasLatitudeLongitude = newLocation.HorizontalAccuracy > -1;
 			position.Latitude = newLocation.Coordinate.Latitude;
 			position.Longitude = newLocation.Coordinate.Longitude;
 
 #if !__TVOS__
+			position.HasSpeed = newLocation.Speed > -1;
 			position.Speed = newLocation.Speed;
 #endif
 
@@ -328,6 +332,7 @@ namespace Plugin.Geolocator
 				var positionList = await geocoder.GeocodeAddressAsync(address);
 				return positionList.Select(p => new Position
 				{
+					HasLatitudeLongitude = true,
 					Latitude = p.Location.Coordinate.Latitude,
 					Longitude = p.Location.Coordinate.Longitude
 				});
@@ -361,8 +366,6 @@ namespace Plugin.Geolocator
 		/// <param name="listenerSettings">Optional settings (iOS only)</param>
 		public async Task<bool> StartListeningAsync(TimeSpan minimumTime, double minimumDistance, bool includeHeading = false, ListenerSettings listenerSettings = null)
 		{
-
-
 			if (minimumDistance < 0)
 				throw new ArgumentOutOfRangeException(nameof(minimumDistance));
 
@@ -380,10 +383,14 @@ namespace Plugin.Geolocator
 			var hasPermission = false;
 			if (UIDevice.CurrentDevice.CheckSystemVersion(9, 0))
 			{
-				if (listenerSettings.AllowBackgroundUpdates)
+				if (listenerSettings.RequireLocationAlwaysPermission)
+				{
 					hasPermission = await CheckAlwaysPermissions();
+				}
 				else
+				{
 					hasPermission = await CheckWhenInUsePermission();
+				}
 			}
 
 			if (!hasPermission)
@@ -464,9 +471,9 @@ namespace Plugin.Geolocator
 
 			isListening = false;
 #if __IOS__
-            // it looks like deferred location updates can apply to the standard service or significant change service. disallow deferral in either case.
-            if ((listenerSettings?.DeferLocationUpdates ?? false) && CanDeferLocationUpdate)
-                manager.DisallowDeferredLocationUpdates();
+			// it looks like deferred location updates can apply to the standard service or significant change service. disallow deferral in either case.
+			if ((listenerSettings?.DeferLocationUpdates ?? false) && CanDeferLocationUpdate)
+				manager.DisallowDeferredLocationUpdates();
 #endif
 
 
@@ -492,8 +499,10 @@ namespace Plugin.Geolocator
 
 		void OnLocationsUpdated(object sender, CLLocationsUpdatedEventArgs e)
 		{
-			foreach (var location in e.Locations)
-				UpdatePosition(location);
+			if (e.Locations.Any())
+			{
+				UpdatePosition(e.Locations.Last());
+			}
 
 			// defer future location updates if requested
 			if ((listenerSettings?.DeferLocationUpdates ?? false) && !deferringUpdates && CanDeferLocationUpdate)
@@ -515,26 +524,36 @@ namespace Plugin.Geolocator
 		void UpdatePosition(CLLocation location)
 		{
 			var p = (lastPosition == null) ? new Position() : new Position(this.lastPosition);
+			p.HasAccuracy = true;
 
 			if (location.HorizontalAccuracy > -1)
 			{
 				p.Accuracy = location.HorizontalAccuracy;
+				p.HasLatitudeLongitude = true;
 				p.Latitude = location.Coordinate.Latitude;
 				p.Longitude = location.Coordinate.Longitude;
 			}
 
 			if (location.VerticalAccuracy > -1)
 			{
+				p.HasAltitude = true;
 				p.Altitude = location.Altitude;
 				p.AltitudeAccuracy = location.VerticalAccuracy;
 			}
 
 #if __IOS__ || __MACOS__
-            if (location.Speed > -1)
-                p.Speed = location.Speed;
+			if (location.Speed > -1)
+			{
+				p.HasSpeed = true;
+				p.Speed = location.Speed;
+			}
+
 
 			if (includeHeading && location.Course > -1)
+			{
+				p.HasHeading = true;
 				p.Heading = location.Course;
+			}
 #endif
 
 			try

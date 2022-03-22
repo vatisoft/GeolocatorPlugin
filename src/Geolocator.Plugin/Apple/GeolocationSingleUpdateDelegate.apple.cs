@@ -100,8 +100,8 @@ namespace Plugin.Geolocator
 				return;
 
 #else
-        public override void UpdatedLocation(CLLocationManager manager, CLLocation newLocation, CLLocation oldLocation)
-        {
+		public override void UpdatedLocation(CLLocationManager manager, CLLocation newLocation, CLLocation oldLocation)
+		{
 #endif
 			if (newLocation.HorizontalAccuracy < 0)
 				return;
@@ -109,15 +109,20 @@ namespace Plugin.Geolocator
 			if (haveLocation && newLocation.HorizontalAccuracy > position.Accuracy)
 				return;
 
+			position.HasAccuracy = true;
 			position.Accuracy = newLocation.HorizontalAccuracy;
+			position.HasAltitude = newLocation.VerticalAccuracy > -1;
 			position.Altitude = newLocation.Altitude;
 			position.AltitudeAccuracy = newLocation.VerticalAccuracy;
+			position.HasLatitudeLongitude = newLocation.HorizontalAccuracy > -1;
 			position.Latitude = newLocation.Coordinate.Latitude;
 			position.Longitude = newLocation.Coordinate.Longitude;
 #if __IOS__ || __MACOS__
-            position.Speed = newLocation.Speed;
+			position.HasSpeed = newLocation.Speed > -1;
+			position.Speed = newLocation.Speed;
 			if (includeHeading)
 			{
+				position.HasHeading = newLocation.Course > -1;
 				position.Heading = newLocation.Course;
 			}
 #endif
